@@ -32,11 +32,15 @@ const Edit = () => {
   const Id = parseInt(url.searchParams.get("group_Id"));
   const productContext = useContext(UserContext);
   let productsList = productContext.products;
+  let product;
+  productsList.map(item => {
+    if (item.id == Id) product = item;
+  })
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: {
-      imgLink: productsList[Id].imgLink,
-      name: productsList[Id].name,
-      price: productsList[Id].price,
+      imgLink: product.imgLink,
+      name: product.name,
+      price: product.price,
     }
   }
   );
@@ -44,7 +48,7 @@ const Edit = () => {
 
   const onSubmit = data => {
     data['id'] = Id;
-    productsList[Id] = data;
+    productsList.splice(productsList.indexOf(product), 1, data);
     productContext.changeProducts([...productsList]);
     console.log(data);
     navigate('/');
